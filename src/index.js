@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import { handleBookPaths } from './api/book/book.router.js'
 import { createServer } from 'node:http'
 import { connect } from './helper/db.helper.js'
 import * as helperHandlers from './helper/http.helper.js'
@@ -7,25 +8,30 @@ import { logger } from './utils/logger.js'
 
 const bootstrap = async () => {
   await connect()
-  const server = createServer((req, res) => {
+  const server = createServer(async (req, res) => {
     try {
       loggerMiddleware(req, res)
       const parsedUrl = new URL(req.url, `http://${req.headers.host}`)
-      const pathName = parsedUrl.pathname
+      const paths = parsedUrl.pathname.split('/').filter(Boolean)
+      const query = parsedUrl.searchParams
 
-      console.log(pathName.split('/').filter(Boolean))
+      req.body = await helperHandlers.getBody(req)
+      // handle the body type.
 
-      if (pathName === '/favicon.ico') {
+      if (paths === '/favicon.ico') {
         return helperHandlers.handleFavicon(req, res)
-      } else if (pathName === '/') {
+      } else if (paths === '/') {
         return helperHandlers.handleRoot(req, res)
-      } else if (pathName === '/health') {
+      } else if (paths === '/health') {
         return helperHandlers.handleHealthCheck(req, res)
+      } else if (await handleBookPaths(req, res, paths, query)) {
+        // handleBookPaths returns true if it handles the request
+        return
       }
 
       return helperHandlers.handle404(req, res)
     } catch (err) {
-      return helperHandlers.handle500(err, req, res)
+      return helperHandlers.handleErrors(err, req, res)
     }
   })
 

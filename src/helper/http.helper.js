@@ -11,7 +11,7 @@ export const handle404 = (_req, res) => {
   res.end('{"message": "Not Found"}')
 }
 
-export const handle500 = (err, _req, res) => {
+export const handleErrors = (err, _req, res) => {
   if (isHttpError(err)) {
     // log only 500 errors
     if (err.status === 500) {
@@ -38,4 +38,24 @@ export const handleRoot = (_req, res) => {
 export const handleHealthCheck = (_req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' })
   res.end(JSON.stringify({ status: 'UP' }))
+}
+
+/**
+ * @description Helper function to get the body of the request
+ * @param {Request} req - request object
+ * @returns {any} - returns the body of the request
+ */
+export const getBody = async req => {
+  let body = ''
+
+  for await (const chunk of req) {
+    body += chunk
+  }
+
+  // handle content type
+  if (req.headers['content-type'] === 'application/json') {
+    body = JSON.parse(body)
+  }
+
+  return body
 }

@@ -1,10 +1,12 @@
-CREATE TABLE IF NOT EXISTS public.books (
+--- Create the database.
+CREATE TABLE IF NOT EXISTS public."books" (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     title text NOT NULL,
     author text NOT NULL,
     isbn text NOT NULL,
     avaliable_quantity int NOT NULL,
     shelf_location text NOT NULL
+    created_at date NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS public."user"
