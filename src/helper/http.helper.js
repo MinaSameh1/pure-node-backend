@@ -1,5 +1,6 @@
 import { logger } from '../utils/logger.js'
 import { isHttpError } from '../utils/error.util.js'
+import { isPositiveNumber } from '../utils/utils.js'
 
 /**
  * @description Helper function to handle 404 errors
@@ -108,4 +109,16 @@ export const getQueryParams = parsedUrl => {
     return value
   }
   return query
+}
+export const getDefaultQueryParams = query => {
+  const page = isPositiveNumber(query.get('page')) ? query.get('page') : 1
+  const limit = isPositiveNumber(query.get('limit')) ? query.get('limit') : 10
+  const sort = query.get('sort', 'created_at')
+  const sortDirection = query.get('sortDirection', '-1')
+  return {
+    page,
+    limit,
+    sort,
+    sortDirection,
+  }
 }

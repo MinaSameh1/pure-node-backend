@@ -1,5 +1,5 @@
-import { isPositiveNumber } from '../../utils/utils.js'
-import { isUUID } from '../../utils/uuid.util.js'
+import { validateParamId } from '../../helper/validations.helper.js'
+import { getDefaultQueryParams } from '../../helper/http.helper.js'
 import * as service from './book.service.js'
 
 /**
@@ -15,10 +15,7 @@ import * as service from './book.service.js'
  * // returns { page: 1, limit: 10, sort: 'title', sortDirection: '1', search: 'hello', title: 'hello', author: 'hello', isbn: 'hello', avaliable_quantity_start: 1, avaliable_quantity_end: 10, shelf_location: 'hello' }
  */
 function getQueryParamsForGetAllController(query) {
-  const page = isPositiveNumber(query.get('page')) ? query.get('page') : 1
-  const limit = isPositiveNumber(query.get('limit')) ? query.get('limit') : 10
-  const sort = query.get('sort', 'created_at')
-  const sortDirection = query.get('sortDirection', '-1')
+  const defaultQuery = getDefaultQueryParams(query)
   const search = query.get('search')
   const title = query.get('title')
   const author = query.get('author')
@@ -27,10 +24,7 @@ function getQueryParamsForGetAllController(query) {
   const avaliable_quantity_end = query.get('avaliable_quantity_end')
   const shelf_location = query.get('shelf_location')
   return {
-    page,
-    limit,
-    sort,
-    sortDirection,
+    ...defaultQuery,
     search,
     title,
     author,
@@ -39,26 +33,6 @@ function getQueryParamsForGetAllController(query) {
     avaliable_quantity_end,
     shelf_location,
   }
-}
-
-/**
- * @description This function will validate the id param from the request. Checks if its a valid uuid.
- * @param {String} id: the id param from the request.
- * @param {Object} res: the response object.
- * @returns {Boolean} true if valid, false if not.
- */
-const validateParamId = (id, res) => {
-  if (!id) {
-    res.writeHead(400, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ message: 'Request recieved without an ID!' }))
-    return false
-  }
-  if (!isUUID(id)) {
-    res.writeHead(400, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ message: 'Invalid ID recieved:' + id }))
-    return false
-  }
-  return true
 }
 
 export async function handleGetBookById(req, res) {
@@ -98,9 +72,7 @@ export async function handleCreateBook(req, res) {
 }
 
 export async function handleUpdateBook(req, res) {
-  if (!validateParamId(req.params.id, res)) {
-    return
-  }
+  validateParamId(req.params.id, res)
   const { errs, body } = service.validateBookBody(req.body)
   if (errs.length > 0) {
     res.writeHead(400, { 'Content-Type': 'application/json' })
@@ -115,9 +87,7 @@ export async function handleUpdateBook(req, res) {
 }
 
 export async function handleDeleteBook(req, res) {
-  if (!validateParamId(req.params.id, res)) {
-    return
-  }
+  validateParamId(req.params.id, res)
   const item = await service.deleteById(req.params.id)
   res.writeHead(200, { 'Content-Type': 'application/json' })
   return res.end(
