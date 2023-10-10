@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS public."books" (
     author text NOT NULL,
     isbn text NOT NULL,
     avaliable_quantity int NOT NULL,
-    shelf_location text NOT NULL
+    shelf_location text NOT NULL,
     created_at date NOT NULL DEFAULT now()
 );
 
