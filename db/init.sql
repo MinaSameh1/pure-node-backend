@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS public."borrower"
     name text NOT NULL,
     email text NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now(),
-    CONSTRAINT user_pkey PRIMARY KEY (id)
+    CONSTRAINT borrower_pkey PRIMARY KEY (id),
+    CONSTRAINT borrower_email UNIQUE (email)
 );
 
 CREATE TABLE IF NOT EXISTS public.borrowerd_books
