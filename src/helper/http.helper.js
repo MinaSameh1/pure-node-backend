@@ -59,3 +59,53 @@ export const getBody = async req => {
 
   return body
 }
+
+export const handleServerShutdown = (server, callback) => {
+  if (!server) {
+    throw new Error('Server is not defined!')
+  }
+  if (!callback || typeof callback !== 'function') {
+    throw new Error('Callback is not defined or not a function!')
+  }
+
+  server.on('close', () => {
+    logger.info('Server Closed')
+    callback()
+    logger.info('Exited Gracefully')
+    process.exit(0)
+  })
+
+  const handleSignalShutdown = signal => () => {
+    logger.info(`Received ${signal}. Shutting down`)
+    setTimeout(() => {
+      logger.error(
+        'Could not close connections in time, forcefully shutting down',
+      )
+    }, 8000)
+    server.close()
+    server.closeAllConnections()
+  }
+
+  process.on('SIGTERM', handleSignalShutdown('SIGTERM'))
+  process.on('SIGINT', handleSignalShutdown('SIGINT'))
+  process.on('SIGQUIT', handleSignalShutdown('SIGQUIT'))
+  process.on('unhandledRejection', (reason, promise) => {
+    logger.error('Unhandled Rejection at:', promise, 'reason:', reason)
+  })
+  process.on('uncaughtException', err => {
+    logger.error('Uncaught Exception thrown:', err, '\n', err.stack)
+    process.exit(1)
+  })
+}
+
+export const getQueryParams = parsedUrl => {
+  const query = Object.fromEntries(parsedUrl.searchParams.entries())
+  query.get = (key, defaultValue = undefined) => {
+    const value = query[key]
+    if (!value) {
+      return defaultValue
+    }
+    return value
+  }
+  return query
+}

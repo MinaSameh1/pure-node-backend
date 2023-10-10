@@ -17,7 +17,7 @@ const route = 'book'
  * @param {URLSearchParams} query - query params
  * @returns {Promise<boolean>} - returns true if it handles the request
  */
-export const handleBookPaths = async (req, res, pathName, query) => {
+export const handleBookPaths = async (req, res, pathName) => {
   if (pathName.includes(route) && pathName[0] === route) {
     try {
       if (req.method === 'GET') {
@@ -25,10 +25,11 @@ export const handleBookPaths = async (req, res, pathName, query) => {
         // if it has an id, return the book with that id
         if (pathName.length > 1 && pathName[1]) {
           // leave validation of the ID to the controller
-          await handleGetBookById(req, res, pathName[1])
+          req.params.id = pathName[1]
+          await handleGetBookById(req, res)
           return true
         } else {
-          await handleGetAllBooks(req, res, query)
+          await handleGetAllBooks(req, res)
           return true
         }
       }
@@ -37,11 +38,13 @@ export const handleBookPaths = async (req, res, pathName, query) => {
         return true
       }
       if (req.method === 'PUT') {
-        await handleUpdateBook(req, res, pathName.length > 1 && pathName[1])
+        req.params.id = pathName.length > 1 ? pathName[1] : undefined
+        await handleUpdateBook(req, res)
         return true
       }
       if (req.method === 'DELETE') {
-        await handleDeleteBook(req, res, pathName.length > 1 && pathName[1])
+        req.params.id = pathName.length > 1 ? pathName[1] : undefined
+        await handleDeleteBook(req, res)
         return true
       }
       return false
