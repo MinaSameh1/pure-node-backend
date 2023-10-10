@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public."books" (
     created_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS public."user"
+CREATE TABLE IF NOT EXISTS public."borrower"
 (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
     name text NOT NULL,
@@ -18,10 +18,10 @@ CREATE TABLE IF NOT EXISTS public."user"
     CONSTRAINT user_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.borrowers
+CREATE TABLE IF NOT EXISTS public.borrowerd_books
 (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
-    "user" uuid NOT NULL,
+    borrower uuid NOT NULL,
     book uuid NOT NULL,
     due_date date NOT NULL,
     checked_out_date timestamptz NOT NULL DEFAULT now(),
@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS public.borrowers
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID,
-    CONSTRAINT borrowers_user_fkey FOREIGN KEY ("user")
-    REFERENCES public."user" (id) MATCH SIMPLE
+    CONSTRAINT borrowers_borrower_fkey FOREIGN KEY ("borrower")
+    REFERENCES public."borrower" (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID
@@ -47,15 +47,15 @@ CREATE TYPE public.transaction_type AS ENUM
 CREATE TABLE IF NOT EXISTS public."borrow_transactions_log"
 (
     book_id uuid NOT NULL,
-    user_id uuid NOT NULL,
+    borrower_id uuid NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now(),
     transation_type transaction_type NOT NULL,
     CONSTRAINT "transactions_book_fkey" FOREIGN KEY (book_id)
     REFERENCES public.books (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION,
-    CONSTRAINT "transactions_user_fkey" FOREIGN KEY (user_id)
-    REFERENCES public."user" (id) MATCH SIMPLE
+    CONSTRAINT "transactions_borrower_fkey" FOREIGN KEY (borrower_id)
+    REFERENCES public."borrower" (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
 );
