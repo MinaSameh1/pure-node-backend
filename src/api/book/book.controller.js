@@ -18,7 +18,7 @@ function getQueryParamsForGetAllController(query) {
   const page = isPositiveNumber(query.get('page')) ? query.get('page') : 1
   const limit = isPositiveNumber(query.get('limit')) ? query.get('limit') : 10
   const sort = query.get('sort', 'created_at')
-  const sortDirection = query.get('sortDirection', "-1")
+  const sortDirection = query.get('sortDirection', '-1')
   const search = query.get('search')
   const title = query.get('title')
   const author = query.get('author')
@@ -61,7 +61,8 @@ const validateParamId = (id, res) => {
   return true
 }
 
-export async function handleGetBookById(_req, res, id) {
+export async function handleGetBookById(req, res) {
+  const id = req.params.id
   if (!validateParamId(id, res)) {
     return
   }
@@ -108,7 +109,9 @@ export async function handleUpdateBook(req, res) {
 
   const item = await service.updateById(req.params.id, body)
   res.writeHead(200, { 'Content-Type': 'application/json' })
-  return res.end(JSON.stringify({ data: item, message: 'Successfully updated' }))
+  return res.end(
+    JSON.stringify({ data: item, message: 'Successfully updated' }),
+  )
 }
 
 export async function handleDeleteBook(req, res) {
@@ -117,5 +120,7 @@ export async function handleDeleteBook(req, res) {
   }
   const item = await service.deleteById(req.params.id)
   res.writeHead(200, { 'Content-Type': 'application/json' })
-  return res.end(JSON.stringify({ data: item, message: 'Successfully deleted' }))
+  return res.end(
+    JSON.stringify({ data: item, message: 'Successfully deleted' }),
+  )
 }
