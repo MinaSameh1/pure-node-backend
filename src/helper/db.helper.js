@@ -29,7 +29,7 @@ export function connect() {
  * @description responsible for disconnecting the database.
  */
 export function disconnect() {
-  pool.end()
+  return pool.end()
 }
 
 export function getClient() {
@@ -45,6 +45,22 @@ export function getClient() {
  */
 export async function query(sqlQuery, params = []) {
   const start = Date.now()
+  if (!pool) {
+    throw new Error('Database not connected.')
+  }
+  if (!sqlQuery) {
+    throw new Error('Missing SQL Query!')
+  }
+  // if (params.length > 0) {
+  //   logger.debug(
+  //     `Running Query: ${sqlQuery} with params: ${JSON.stringify(
+  //       params,
+  //       null,
+  //       2,
+  //     )}`,
+  //   )
+  // }
+
   const res = await pool.query(sqlQuery, params)
   logger.debug(
     `Executed Query, ${sqlQuery} , Took ${Date.now() - start}ms with ${
@@ -52,6 +68,10 @@ export async function query(sqlQuery, params = []) {
     } count`,
   )
   return res
+}
+
+export const isSortColumnError = err => {
+  return err.code && err.code === '42703'
 }
 
 export default query

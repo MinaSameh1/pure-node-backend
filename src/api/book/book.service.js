@@ -1,6 +1,8 @@
-import { isNumber } from '../../utils/utils.js'
-import { bookRepository } from '../../repository/book.repository.js'
+import { bookRepository } from '../../db/book.repository.js'
+import { isSortColumnError } from '../../helper/db.helper.js'
 import { HttpError } from '../../utils/error.util.js'
+import { logger } from '../../utils/logger.js'
+import { isNumber } from '../../utils/utils.js'
 
 export const validateBookBody = body => {
   const errs = []
@@ -55,4 +57,45 @@ export const createBook = async book => {
     throw new HttpError(400, 'Book with that isbn already exists!')
   }
   return bookRepository.create(book)
+}
+
+export const getAllBooks = async options => {
+  try {
+    // await here for the error to be caught by the catch block
+    return await bookRepository.findAllBooks(options)
+  } catch (err) {
+    if (isSortColumnError(err)) {
+      throw new HttpError(400, 'Invalid sort column!')
+    }
+    logger.error(err)
+    throw new HttpError(500, err.message)
+  }
+}
+
+export const getBookById = async id => {
+  try {
+    const book = await bookRepository.getBookById(id)
+    if (!book) {
+      throw new HttpError(404, 'Book not found!')
+    }
+    return book
+  } catch (err) {
+    throw new HttpError(500, err.message, err)
+  }
+}
+
+export const updateById = async (id, book) => {
+  const bookExists = await bookRepository.getBookById(id)
+  if (!bookExists) {
+    throw new HttpError(404, 'Book not found!')
+  }
+  return bookRepository.updateById(id, book)
+}
+
+export const deleteById = async id => {
+  const item = await bookRepository.deleteById(id)
+  if (!item) { 
+    throw new HttpError(404, 'Book not found!')
+  }
+  return item
 }
