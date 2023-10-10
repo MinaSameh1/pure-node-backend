@@ -17,7 +17,7 @@ VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
     return result.rows[0]
   },
 
-  async findAllBooks({
+  async findAll({
     page = 1,
     limit = 10,
     sort = 'created_at',
@@ -79,8 +79,9 @@ VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
 
     const totalCount = await query(queryStr.replace('*', 'COUNT(*)'), params)
 
-    queryStr += ` ORDER BY ${sort} ${sortDirection === '1' ? 'ASC' : 'DESC'
-      } LIMIT $${params.length + 1} OFFSET $${params.length + 2};`
+    queryStr += ` ORDER BY ${sort} ${
+      sortDirection === '1' ? 'ASC' : 'DESC'
+    } LIMIT $${params.length + 1} OFFSET $${params.length + 2};`
     params.push(limit, offset)
     const result = await query(queryStr, params)
     const count = Number(totalCount.rows[0].count)
@@ -91,35 +92,10 @@ VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
     }
   },
 
-  async getBookById(id) {
+  async findOneById(id) {
     const result = await query('SELECT * FROM public.books WHERE id = $1;', [
       id,
     ])
-    return result.rows[0]
-  },
-
-  async updateBook(id, book) {
-    const result = await query(
-      `UPDATE public.books
-SET title = ?, author = ?, isbn = ?, avaliable_quantity = ?, shelf_location = ?
-WHERE id = ? RETURNING *;`,
-      [
-        book.title,
-        book.author,
-        book.isbn,
-        book.avaliable_quantity,
-        book.shelf_location,
-        id,
-      ],
-    )
-    return result.rows[0]
-  },
-
-  async deleteBook(id) {
-    const result = await query(
-      'DELETE FROM public.books WHERE id = ? RETURNING *;',
-      [id],
-    )
     return result.rows[0]
   },
 
@@ -154,5 +130,5 @@ WHERE id = ? RETURNING *;`,
       [id],
     )
     return result.rows[0]
-  }
+  },
 }

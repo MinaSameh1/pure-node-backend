@@ -62,7 +62,7 @@ export const createBook = async book => {
 export const getAllBooks = async options => {
   try {
     // await here for the error to be caught by the catch block
-    return await bookRepository.findAllBooks(options)
+    return await bookRepository.findAll(options)
   } catch (err) {
     if (isSortColumnError(err)) {
       throw new HttpError(400, 'Invalid sort column!')
@@ -74,7 +74,7 @@ export const getAllBooks = async options => {
 
 export const getBookById = async id => {
   try {
-    const book = await bookRepository.getBookById(id)
+    const book = await bookRepository.findOneById(id)
     if (!book) {
       throw new HttpError(404, 'Book not found!')
     }
@@ -85,7 +85,7 @@ export const getBookById = async id => {
 }
 
 export const updateById = async (id, book) => {
-  const bookExists = await bookRepository.getBookById(id)
+  const bookExists = await bookRepository.findOneById(id)
   if (!bookExists) {
     throw new HttpError(404, 'Book not found!')
   }
@@ -94,7 +94,7 @@ export const updateById = async (id, book) => {
 
 export const deleteById = async id => {
   const item = await bookRepository.deleteById(id)
-  if (!item) { 
+  if (!item) {
     throw new HttpError(404, 'Book not found!')
   }
   return item
