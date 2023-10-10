@@ -47,9 +47,9 @@ export async function query(sqlQuery, params = []) {
   const start = Date.now()
   const res = await pool.query(sqlQuery, params)
   logger.debug(
-    `Executed Query, ${sqlQuery} , Took ${Date.now() - start} with ${
+    `Executed Query, ${sqlQuery} , Took ${Date.now() - start}ms with ${
       res.rowCount ?? 0
-    }`,
+    } count`,
   )
   return res
 }
