@@ -13,7 +13,7 @@ export const loggerMiddleware = (req, res) => {
     logger.info(
       `${req.method} ${req.url} ${res.statusCode} took ${
         Date.now() - start
-      } - ${req.headers['user-agent']} ${ip}`,
+      }ms - ${req.headers['user-agent']} ${ip}`,
     )
   })
 }
