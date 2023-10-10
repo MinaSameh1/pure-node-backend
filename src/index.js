@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import 'dotenv/config.js'
 import { handleBookPaths } from './api/book/book.router.js'
 import { createServer } from 'node:http'
 import { connect } from './helper/db.helper.js'
@@ -48,7 +48,7 @@ const bootstrap = async () => {
 
   server.listen(port, () => {
     logger.info(`Server is running at ${port}`)
-    logger.debug(`Log level is at ${process.env.LOG_LEVEL}`)
+    logger.debug(`Log level is at ${logger.getLevel()}`)
   })
 }
 
