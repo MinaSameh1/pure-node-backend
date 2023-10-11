@@ -1,4 +1,3 @@
-import * as borrowerService from "../borrower/borrower.service.js";
 import * as bookService from "../book/book.service.js";
 import { borrowTransactionLogRepository } from '../../db/borrow_transactions_log.repository.js'
 import { borrowedBooksRepository } from "../../db/borrowerd_books.repository.js";
@@ -10,9 +9,17 @@ export async function checkoutBook(borrowerId, bookId, dueDate) {
   if (borrowedBook) {
     throw new HttpError(400, 'Book is already borrowed')
   }
+  // decrease book quantity
+  // Need to get rest of the book for PUT!!
+  const book = await bookService.getBookById(bookId)
+  if (book.avaliable_quantity <= 0) {
+    throw new HttpError(400, 'Book is not available')
+  }
+
   const results = await Promise.allSettled([
     borrowTransactionLogRepository.createCheckout(borrowerId, bookId),
-    borrowedBooksRepository.create(borrowerId, bookId, dueDate)
+    borrowedBooksRepository.create(borrowerId, bookId, dueDate),
+    bookService.updateById(bookId, { ...book, avaliable_quantity: book.avaliable_quantity - 1 })
   ])
 
   results.forEach(result => {
@@ -39,6 +46,8 @@ export async function returnBook(borrowerId, bookId) {
   }
 
   await borrowTransactionLogRepository.createReturn(borrowerId, bookId)
+  const book = await bookService.getBookById(bookId)
+  await bookService.updateById(bookId, { ...book, avaliable_quantity: book.avaliable_quantity + 1 })
 
   return result
 }

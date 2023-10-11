@@ -31,15 +31,15 @@ export const handleBorroweringPaths = async (req, res, pathName) => {
       if (req.method === 'POST') {
         // for paths like /borrow/USER_ID/checkout/BOOK_ID
         if (pathName.length > 2 && pathName[2] === 'checkout' && pathName[3]) {
-          req.params.bookId = pathName[3]
-          req.params.borrowerId = pathName[1]
+          req.params.borrowerId = pathName[1]?.toString()
+          req.params.bookId = pathName[3]?.toString()
           await handleCheckoutBook(req, res)
           return true
         }
         // for paths like /borrow/USER_ID/return/BOOK_ID
         if (pathName.length > 2 && pathName[2] === 'return' && pathName[3]) {
-          req.params.bookId = pathName[3]
-          req.params.borrowerId = pathName[1]
+          req.params.bookId = pathName[3]?.toString()
+          req.params.borrowerId = pathName[1]?.toString()
           await handleReturnBook(req, res)
           return true
         }

@@ -41,7 +41,7 @@ export async function handleCheckoutBook(req, res) {
   validateParamId(bookId)
   validateParamId(borrowerId)
 
-  const result = await service.checkoutBook(bookId, borrowerId, dueDate)
+  const result = await service.checkoutBook(borrowerId, bookId, dueDate)
 
   res.writeHead(200, { 'Content-Type': 'application/json' })
   res.end(JSON.stringify({
