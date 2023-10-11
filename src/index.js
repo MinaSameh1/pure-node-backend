@@ -12,6 +12,9 @@ const bootstrap = async () => {
   await connect()
   const server = createServer(async (req, res) => {
     try {
+      if (req.method === 'OPTIONS') {
+        return httpHelpers.handleOptions(req, res)
+      }
       loggerMiddleware(req, res)
       const parsedUrl = new URL(req.url, `http://${req.headers.host}`)
       const paths = parsedUrl.pathname.split('/').filter(Boolean)

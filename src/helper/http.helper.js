@@ -41,6 +41,16 @@ export const handleHealthCheck = (_req, res) => {
   res.end(JSON.stringify({ status: 'UP' }))
 }
 
+export const handleOptions = (_req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET')
+  res.setHeader('Access-Control-Max-Age', 2592000) // 30 days
+  // access-control-allow-credentials: true // if required for auth
+
+  res.writeHead(204)
+  res.end()
+}
+
 /**
  * @description Helper function to get the body of the request
  * @param {Request} req - request object
