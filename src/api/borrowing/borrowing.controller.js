@@ -62,7 +62,7 @@ export async function handleReturnBook(req, res) {
   validateParamId(bookId)
   validateParamId(borrowerId)
 
-  await service.returnBook(bookId, borrowerId)
+  await service.returnBook(borrowerId, bookId)
   res.writeHead(200, { 'Content-Type': 'application/json' })
   res.end(
     JSON.stringify({
