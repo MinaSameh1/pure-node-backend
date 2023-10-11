@@ -13,14 +13,14 @@ You can simply run the docker compose file.
 1. Install deps 
 <details><summary>yarn</summary>
 
-    ```bash
+    ```
     yarn
     ```
 </details>
 Or
 <details><summary>npm</summary>
 
-    ```bash
+    ```
     npm install
     ```
 </details>
