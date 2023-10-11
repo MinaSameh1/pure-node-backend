@@ -16,7 +16,6 @@ You can simply run the docker compose file.
     ```bash
     yarn
     ```
-
 </details>
 Or
 <details><summary>npm</summary>
@@ -24,7 +23,6 @@ Or
     ```bash
     npm install
     ```
-
 </details>
 
 2. Copy .env file and modify to suite your needs. (Connection string for database)
