@@ -12,15 +12,19 @@ You can simply run the docker compose file.
 
 1. Install deps 
 <details><summary>yarn</summary>
-```bash
-yarn
-```
+
+    ```bash
+    yarn
+    ```
+
 </details>
 Or
 <details><summary>npm</summary>
-```bash
-npm install
-```
+
+    ```bash
+    npm install
+    ```
+
 </details>
 
 2. Copy .env file and modify to suite your needs. (Connection string for database)
