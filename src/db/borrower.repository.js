@@ -32,13 +32,29 @@ export const borrowerRepository = {
       params.push(`%${email}%`)
     }
 
+    queryStr += ` ORDER BY ${sort} ${sortDirection === '1' ? 'ASC' : 'DESC'}`
     const totalCount = await query(queryStr.replace('*', 'COUNT(*)'), params)
-    queryStr += ` ORDER BY ${sort} ${sortDirection === '1' ? 'ASC' : 'DESC'
-      } LIMIT $${params.length + 1} OFFSET $${params.length + 2};`
+    const count = Number(totalCount.rows[0].count)
+
+    // On recivia 0 page number, return all results
+    if (page === 0) {
+      const result = await query(queryStr, params)
+      return {
+        total: count,
+        result: result.rows,
+        pages: 1,
+      }
+    } else if (offset >= count) {
+      return {
+        total: 0,
+        result: [],
+        pages: 0,
+      }
+    }
+    queryStr += ` OFFSET $${params.length + 2};`
     params.push(limit, offset)
 
     const result = await query(queryStr, params)
-    const count = Number(totalCount.rows[0].count)
     return {
       total: count,
       result: result.rows,
@@ -47,10 +63,9 @@ export const borrowerRepository = {
   },
 
   async findOneById(id) {
-    const result = await query(
-      `SELECT * FROM public.borrower WHERE id = $1;`,
-      [id],
-    )
+    const result = await query(`SELECT * FROM public.borrower WHERE id = $1;`, [
+      id,
+    ])
     return result.rows.length > 0 ? result.rows[0] : null
   },
 
