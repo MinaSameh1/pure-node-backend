@@ -41,15 +41,21 @@ export const handleHealthCheck = (_req, res) => {
   res.end(JSON.stringify({ status: 'UP' }))
 }
 
-export const handleOptions = (_req, res) => {
+export const setCorsHeaders = (_req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader(
     'Access-Control-Allow-Methods',
     'OPTIONS, GET, POST, PUT, DELETE',
   )
   res.setHeader('Access-Control-Max-Age', 2592000) // 30 days
-  // access-control-allow-credentials: true // if required for auth
+  // res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self'",
+  )
+}
 
+export const handleOptions = (_req, res) => {
   res.writeHead(204)
   res.end()
 }

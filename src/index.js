@@ -12,6 +12,7 @@ const bootstrap = async () => {
   await connect()
   const server = createServer(async (req, res) => {
     try {
+      httpHelpers.setCorsHeaders(req, res)
       if (req.method === 'OPTIONS') {
         return httpHelpers.handleOptions(req, res)
       }
