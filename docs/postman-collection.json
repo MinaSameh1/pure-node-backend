@@ -1,0 +1,577 @@
+{
+	"info": {
+		"_postman_id": "f5c7e971-afe7-4852-9daa-90e8e4bf3983",
+		"name": "Pure Node",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24756689"
+	},
+	"item": [
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Create book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"author\",\n    \"author\": \"aaf\",\n    \"isbn\": \"fasff-fa\",\n    \"avaliable_quantity\": 124,\n    \"shelf_location\": \"5a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/book",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update book",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"update\",\n    \"author\": \"update\",\n    \"isbn\": \"update\",\n    \"avaliable_quantity\": 421,\n    \"shelf_location\": \"6h\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/book/0b59601c-d660-4ee8-8702-fa3c55446f90",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"book",
+								"0b59601c-d660-4ee8-8702-fa3c55446f90"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/book",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"book"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "4",
+									"description": "Limit how many items you want",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"description": "Page Number",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "f",
+									"description": "Search using Title (Not Exact Match)",
+									"disabled": true
+								},
+								{
+									"key": "author",
+									"value": "test",
+									"description": "Search using Author (Not Exact Match)",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "f",
+									"description": "Searchs using Title and Author (Not Exact Match)",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "title",
+									"description": "Sort using Property Key, by default uses created_at",
+									"disabled": true
+								},
+								{
+									"key": "sortDirection",
+									"value": "f",
+									"description": "Sort Direction, 1 for Ascending and anything else for DSC",
+									"disabled": true
+								},
+								{
+									"key": "avaliable_quantity_start",
+									"value": "42",
+									"description": "For usage with Between - Start",
+									"disabled": true
+								},
+								{
+									"key": "avaliable_quantity_end",
+									"value": "100",
+									"description": "For usage with Between - End",
+									"disabled": true
+								},
+								{
+									"key": "shelf_location",
+									"value": "5a",
+									"description": "Search using shelf location - Exact Match",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One Book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/book/88304ce6-9e40-4603-9dec-886831802507",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"book",
+								"88304ce6-9e40-4603-9dec-886831802507"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete One Book",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/book/e9f47b5a-33dd-493a-831f-5a644f47907e",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"book",
+								"e9f47b5a-33dd-493a-831f-5a644f47907e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Borrower",
+			"item": [
+				{
+					"name": "Get Borrowers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/borrower",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"borrower"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_at",
+									"disabled": true
+								},
+								{
+									"key": "sortDirection",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "ahmed",
+									"description": "Not Exact Match",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "test",
+									"description": "Not Exact Match",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Borrower",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/borrower/bd8ceacb-ddfa-4702-8e31-502a167a351e",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"borrower",
+								"bd8ceacb-ddfa-4702-8e31-502a167a351e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Borrower",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"email@mail.com\",\n    \"name\": \"test \"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/borrower",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"borrower"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Borrower",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"ahmed\",\n    \"email\": \"ahmed.test@mail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/borrower/bd8ceacb-ddfa-4702-8e31-502a167a351e",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"borrower",
+								"bd8ceacb-ddfa-4702-8e31-502a167a351e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Borrower",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/borrower/bd8ceacb-ddfa-4702-8e31-502a167a351e",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"borrower",
+								"bd8ceacb-ddfa-4702-8e31-502a167a351e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Borrowing",
+			"item": [
+				{
+					"name": "Get Borrowed Books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/borrow?csv=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"borrow"
+							],
+							"query": [
+								{
+									"key": "book_id",
+									"value": "e951c615-f772-47b1-a649-e4925fba370c",
+									"disabled": true
+								},
+								{
+									"key": "borrower_id",
+									"value": "bbf1cb03-3c12-457c-81a5-d9be558ab9e5",
+									"disabled": true
+								},
+								{
+									"key": "overdue",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "last_month",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "csv",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "CSV",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/borrow?csv=true",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"borrow"
+									],
+									"query": [
+										{
+											"key": "book_id",
+											"value": "e951c615-f772-47b1-a649-e4925fba370c",
+											"disabled": true
+										},
+										{
+											"key": "borrower_id",
+											"value": "bbf1cb03-3c12-457c-81a5-d9be558ab9e5",
+											"disabled": true
+										},
+										{
+											"key": "overdue",
+											"value": "true",
+											"disabled": true
+										},
+										{
+											"key": "last_month",
+											"value": "true",
+											"disabled": true
+										},
+										{
+											"key": "csv",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/csv"
+								},
+								{
+									"key": "Content-Disposition",
+									"value": "attachment; filename=borrowed_books.csv"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 11 Oct 2023 00:01:44 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "id,borrower,book,due_date,checked_out_date,return_date,title,author,name,email\n3befd195-d718-42dd-9621-0aea1faee1db,314d2efd-739d-47fd-b348-121789eea969,e951c615-f772-47b1-a649-e4925fba370c,Mon May 01 2023 00:00:00 GMT+0300 (Eastern European Summer Time),Wed Oct 11 2023 02:25:15 GMT+0300 (Eastern European Summer Time),,author,aaf,test,test@mail.com\n7fdc2616-f624-4c04-9a61-b1bc1b2b221b,314d2efd-739d-47fd-b348-121789eea969,e951c615-f772-47b1-a649-e4925fba370c,Mon May 01 2023 00:00:00 GMT+0300 (Eastern European Summer Time),Sun Jun 11 2023 02:20:27 GMT+0300 (Eastern European Summer Time),Wed Oct 11 2023 02:24:13 GMT+0300 (Eastern European Summer Time),author,aaf,test,test@mail.com\n"
+						}
+					]
+				},
+				{
+					"name": "Get Borrowers Log",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/borrow/log",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"borrow",
+								"log"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "checkout",
+									"description": "test",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "return",
+									"disabled": true
+								},
+								{
+									"key": "book_id",
+									"value": "e951c615-f772-47b1-a649-e4925fba370c",
+									"disabled": true
+								},
+								{
+									"key": "borrower_id",
+									"value": "bbf1cb03-3c12-457c-81a5-d9be558ab9e5",
+									"disabled": true
+								},
+								{
+									"key": "last_month",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "csv",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"due_date\": \"2023-05-01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/borrow/e951c615-f772-47b1-a649-e4925fba370c/checkout/314d2efd-739d-47fd-b348-121789eea969",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"borrow",
+								"e951c615-f772-47b1-a649-e4925fba370c",
+								"checkout",
+								"314d2efd-739d-47fd-b348-121789eea969"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Return Book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/borrow/e951c615-f772-47b1-a649-e4925fba370c/return/314d2efd-739d-47fd-b348-121789eea969",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"borrow",
+								"e951c615-f772-47b1-a649-e4925fba370c",
+								"return",
+								"314d2efd-739d-47fd-b348-121789eea969"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
