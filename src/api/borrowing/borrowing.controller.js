@@ -8,11 +8,18 @@ function getQueryParamsForGetBorrowedBooks(query) {
   const defaultQuery = getDefaultQueryParams(query)
   const borrowerId = query.get('borrower_id')
   const bookId = query.get('book_id')
+  if (borrowerId) validateParamId(borrowerId)
+  if (bookId) validateParamId(bookId)
+
+  let page = query.get('page', 1)
+  if (page < 0) page = 1
+
   return {
     ...defaultQuery,
     sort: query.get('sort', 'checked_out_date'),
     borrowerId,
     bookId,
+    page,
     overdue: query.get('overdue'),
     lastMonth: query.get('last_month'),
     csv: query.get('csv'),
@@ -44,10 +51,12 @@ export async function handleCheckoutBook(req, res) {
   const result = await service.checkoutBook(borrowerId, bookId, dueDate)
 
   res.writeHead(200, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify({
-    message: 'Book checked out successfully',
-    data: result
-  }))
+  res.end(
+    JSON.stringify({
+      message: 'Book checked out successfully',
+      data: result,
+    }),
+  )
 }
 
 export async function handleReturnBook(req, res) {
@@ -57,11 +66,13 @@ export async function handleReturnBook(req, res) {
   validateParamId(bookId)
   validateParamId(borrowerId)
 
-  await service.returnBook(bookId, borrowerId)
+  await service.returnBook(borrowerId, bookId)
   res.writeHead(200, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify({
-    message: 'Book returned successfully',
-  }))
+  res.end(
+    JSON.stringify({
+      message: 'Book returned successfully',
+    }),
+  )
 }
 
 export async function handleGetBorrowedBooks(req, res) {
@@ -71,18 +82,21 @@ export async function handleGetBorrowedBooks(req, res) {
 
   if (query.csv) {
     res.setHeader('Content-Type', 'text/csv')
-    res.setHeader('Content-Disposition', 'attachment; filename=borrowed_books.csv')
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename=borrowed_books.csv',
+    )
     const headers = [
-      "id",
-      "borrower",
-      "book",
-      "due_date",
-      "checked_out_date",
-      "return_date",
-      "title",
-      "author",
-      "name",
-      "email",
+      'id',
+      'borrower',
+      'book',
+      'due_date',
+      'checked_out_date',
+      'return_date',
+      'title',
+      'author',
+      'name',
+      'email',
     ]
     res.write(headers.join(',') + '\n')
     results.result.forEach(row => {
@@ -92,13 +106,14 @@ export async function handleGetBorrowedBooks(req, res) {
     return
   }
 
-
   res.writeHead(200, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify({
-    data: results.result,
-    total: results.total,
-    pages: results.pages,
-  }))
+  res.end(
+    JSON.stringify({
+      data: results.result,
+      total: results.total,
+      pages: results.pages,
+    }),
+  )
 }
 
 export async function handleGetTransactionLog(req, res) {
@@ -108,13 +123,11 @@ export async function handleGetTransactionLog(req, res) {
 
   if (query.csv) {
     res.setHeader('Content-Type', 'text/csv')
-    res.setHeader('Content-Disposition', 'attachment; filename=borrow_transactions_log.csv')
-    const headers = [
-      "book_id",
-      "borrower_id",
-      "created_at",
-      "transation_type",
-    ]
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename=borrow_transactions_log.csv',
+    )
+    const headers = ['book_id', 'borrower_id', 'created_at', 'transation_type']
     res.write(headers.join(',') + '\n')
     results.result.forEach(row => {
       res.write(headers.map(header => row[header]).join(',') + '\n')
@@ -124,9 +137,11 @@ export async function handleGetTransactionLog(req, res) {
   }
 
   res.writeHead(200, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify({
-    data: results.result,
-    total: results.total,
-    pages: results.pages,
-  }))
+  res.end(
+    JSON.stringify({
+      data: results.result,
+      total: results.total,
+      pages: results.pages,
+    }),
+  )
 }
