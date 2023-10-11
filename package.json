@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test tests/.",
+    "test:watch": "node --watch --test tests/."
   },
   "keywords": [
     "node",
