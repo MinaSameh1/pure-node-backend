@@ -1,6 +1,8 @@
 import 'dotenv/config.js'
-import { handleBookPaths } from './api/book/book.router.js'
 import { createServer } from 'node:http'
+import { handleBookPaths } from './api/book/book.router.js'
+import { handleBorrowerPaths } from './api/borrower/borrower.router.js'
+import { handleBorroweringPaths } from './api/borrowing/borrowing.router.js'
 import { connect, disconnect } from './helper/db.helper.js'
 import * as httpHelpers from './helper/http.helper.js'
 import { loggerMiddleware } from './middlewares/logger.middleware.js'
@@ -18,14 +20,18 @@ const bootstrap = async () => {
 
       req.body = await httpHelpers.getBody(req)
 
-      if (paths === '/favicon.ico') {
+      if (req.url === '/favicon.ico') {
         return httpHelpers.handleFavicon(req, res)
-      } else if (paths === '/') {
+      } else if (req.url === '/') {
         return httpHelpers.handleRoot(req, res)
-      } else if (paths === '/health') {
+      } else if (req.url === '/health') {
         return httpHelpers.handleHealthCheck(req, res)
       } else if (await handleBookPaths(req, res, paths)) {
         // handleBookPaths returns true if it handles the request
+        return
+      } else if (await handleBorrowerPaths(req, res, paths)) {
+        return
+      } else if (await handleBorroweringPaths(req, res, paths)) {
         return
       }
 

@@ -25,5 +25,22 @@ services:
     networks:
       - postgres-network
 
+  node:
+    build: .
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - POSTGRES_HOST=database
+      - PORT=8000
+    ports:
+      - 8000:8000
+    links:
+      - database
+    depends_on:
+      - database
+    networks:
+      - postgres-network
+
 networks:
   postgres-network:

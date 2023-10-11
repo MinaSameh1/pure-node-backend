@@ -1,5 +1,5 @@
 import { HttpError } from '../utils/error.util.js'
-import { isUUID } from '../utils/uuid.util.js'
+import { isUUID } from "../utils/utils.js"
 
 /**
  * @description This function will validate the id param from the request. Checks if its a valid uuid.
