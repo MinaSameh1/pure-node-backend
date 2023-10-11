@@ -43,6 +43,8 @@ npm start
 
 Postman file included with query params and endpoints under `./docs` folder.
 
+For env vars, You can change `LOG_LEVEL` to debug to see more info.
+
 ### Resources
 - CRUD operations on `book` with details such as details like title, author, ISBN, available quantity, and shelf location.
 - Register borrowers, CRUD as well. Filters using Query
