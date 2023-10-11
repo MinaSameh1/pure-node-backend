@@ -43,7 +43,10 @@ export const handleHealthCheck = (_req, res) => {
 
 export const handleOptions = (_req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET')
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'OPTIONS, GET, POST, PUT, DELETE',
+  )
   res.setHeader('Access-Control-Max-Age', 2592000) // 30 days
   // access-control-allow-credentials: true // if required for auth
 
