@@ -69,7 +69,8 @@ export const borrowedBooksRepository = {
 
     queryStr += ` ORDER BY bb.${sort} ${sortDirection === '1' ? 'ASC' : 'DESC'}`
     const count = Number(totalCount.rows[0].count)
-    if (page === 0) {
+
+    if (page == 0) {
       const result = await query(queryStr, params)
       return {
         total: count,
@@ -83,6 +84,7 @@ export const borrowedBooksRepository = {
         pages: 0,
       }
     }
+
     queryStr += ` LIMIT $${params.length + 1} OFFSET $${params.length + 2}`
     params.push(limit, offset)
 

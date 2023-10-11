@@ -4,7 +4,7 @@ export const borrowTransactionLogRepository = {
   createCheckout: async (borrowerId, bookId) => {
     const result = await query(
       `INSERT INTO borrow_transactions_log (borrower_id, book_id, transation_type) VALUES ($1, $2, $3) RETURNING *`,
-      [borrowerId, bookId, 'checkout']
+      [borrowerId, bookId, 'checkout'],
     )
     return result.rows[0]
   },
@@ -12,16 +12,16 @@ export const borrowTransactionLogRepository = {
   createReturn: async (borrowerId, bookId) => {
     const result = await query(
       `INSERT INTO borrow_transactions_log (borrower_id, book_id, transation_type) VALUES ($1, $2, $3) RETURNING *`,
-      [borrowerId, bookId, 'return']
+      [borrowerId, bookId, 'return'],
     )
     return result.rows[0]
   },
 
-  // check that the book is not already borrowed 
+  // check that the book is not already borrowed
   async hasBorrowedBook(borrowerId, bookId) {
     const result = await query(
       `SELECT * FROM borrow_transactions_log WHERE borrower_id = $1 AND book_id = $2 AND transation_type = 'checkout'`,
-      [borrowerId, bookId]
+      [borrowerId, bookId],
     )
     return result.rows.length !== 0 ? result.rows[0] : null
   },
@@ -45,31 +45,52 @@ export const borrowTransactionLogRepository = {
       params.push(borrowerId.toString())
     }
     if (bookId) {
-      if (queryStr.includes('WHERE')) queryStr += ` AND book_id = $${params.length + 1}`
+      if (queryStr.includes('WHERE'))
+        queryStr += ` AND book_id = $${params.length + 1}`
       else queryStr += ` WHERE book_id = $${params.length + 1}`
       params.push(bookId.toString())
     }
     if (type) {
-      if (queryStr.includes('WHERE')) queryStr += ` AND transation_type = $${params.length + 1}`
+      if (queryStr.includes('WHERE'))
+        queryStr += ` AND transation_type = $${params.length + 1}`
       else queryStr += ` WHERE transation_type = $${params.length + 1}`
       params.push(type)
     }
     if (lastMonth) {
-      if (queryStr.includes('WHERE')) queryStr += ` AND created_at > NOW() - INTERVAL '1 month'`
+      if (queryStr.includes('WHERE'))
+        queryStr += ` AND created_at > NOW() - INTERVAL '1 month'`
       else queryStr += ` WHERE created_at > NOW() - INTERVAL '1 month'`
     }
     const totalCount = await query(queryStr.replace('*', 'COUNT(*)'), params)
+    const count = Number(totalCount.rows[0].count)
 
-    queryStr += ` ORDER BY ${sort} ${sortDirection === "1" ? "ASC" : "DESC"} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`
+    queryStr += ` ORDER BY ${sort} ${sortDirection === '1' ? 'ASC' : 'DESC'}`
+
+    // On recieving 0 page number, return all results
+    if (page == 0) {
+      const result = await query(queryStr, params)
+      return {
+        total: count,
+        result: result.rows,
+        pages: 1,
+      }
+    } else if (offset >= count) {
+      return {
+        total: 0,
+        result: [],
+        pages: 0,
+      }
+    }
+
+    queryStr += ` LIMIT $${params.length + 1} OFFSET $${params.length + 2}`
     params.push(limit, offset)
     const result = await query(queryStr, params)
-    const count = Number(totalCount.rows[0].count)
     return {
       total: count,
       result: result.rows,
       pages: Math.ceil(count / limit),
     }
-  }
+  },
 
   // prevent update and delete.
 }

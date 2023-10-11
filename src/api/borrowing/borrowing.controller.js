@@ -11,11 +11,15 @@ function getQueryParamsForGetBorrowedBooks(query) {
   if (borrowerId) validateParamId(borrowerId)
   if (bookId) validateParamId(bookId)
 
+  let page = query.get('page', 1)
+  if (page < 0) page = 1
+
   return {
     ...defaultQuery,
     sort: query.get('sort', 'checked_out_date'),
     borrowerId,
     bookId,
+    page,
     overdue: query.get('overdue'),
     lastMonth: query.get('last_month'),
     csv: query.get('csv'),

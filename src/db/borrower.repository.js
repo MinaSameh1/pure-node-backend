@@ -36,8 +36,8 @@ export const borrowerRepository = {
     const totalCount = await query(queryStr.replace('*', 'COUNT(*)'), params)
     const count = Number(totalCount.rows[0].count)
 
-    // On recivia 0 page number, return all results
-    if (page === 0) {
+    // On recieving 0 page number, return all results
+    if (page == 0) {
       const result = await query(queryStr, params)
       return {
         total: count,
